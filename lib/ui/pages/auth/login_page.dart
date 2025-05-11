@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sea_mobile/ui/pages/auth/register_page.dart';
 import 'package:sea_mobile/ui/pages/auth/forgot_password_page.dart';
 import 'package:sea_mobile/ui/widgets/input_field.dart';
+import 'package:sea_mobile/config/base_api_config.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,6 +25,35 @@ class LoginPageState extends State<LoginPage> {
       }
     } catch (error) {
       print("Google Sign-In Error: $error");
+    }
+  }
+
+  Future<void> _handleSingin() async {
+    try {
+      Map<String, String> data = {
+        'email': _emailController.text.trim(),
+        'password': _passwordController.text.trim(),
+      };
+      print("Data: $data"); // Always print data for debugging
+
+      // Basic validation
+      if (data['email']!.isEmpty || data['password']!.isEmpty) {
+        print("Error: Email or password cannot be empty");
+        return; // Stop execution if fields are empty
+      }
+
+      // Uncomment and use your API call
+      // final response = await BaseApiService().postRequest('/auth/login', data);
+      // if (response?.statusCode == 200) {
+      //   Navigator.pushReplacementNamed(context, '/home');
+      // } else {
+      //   print("API error: ${response?.statusCode}");
+      // }
+
+      // Temporary navigation for testing (remove this after enabling API)
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (error) {
+      print("Sign-in failed with error: $error");
     }
   }
 
@@ -86,11 +116,7 @@ class LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    String email = _emailController.text;
-                    String password = _passwordController.text;
-                    print("Email: $email, Password: $password");
-                  },
+                  onPressed: _handleSingin,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     minimumSize: const Size(double.infinity, 50),
